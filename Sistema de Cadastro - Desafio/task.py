@@ -34,14 +34,16 @@ class Task:
         
     def listOfAllTasks(self,db):
         records = db.getAllTask()
+        print("===========================")
+        print(" ID | Empr | Descrição")
+        print("---------------------------")
         for row in records:
-            task_id, employee_id, date_of_start, date_limit, description = row
-            print(f"Task ID: {task_id}")
-            print(f"Employee ID: {employee_id}")
-            print(f"Date of Start: {date_of_start}")
-            print(f"Date Limit: {date_limit}")
-            print(f"Description: {description}")
-            print("-----------------------------")
+            # date_of_start, date_limit,
+            task_id,description, employee_id  = row
+            
+            id_string = f"{task_id:3}"
+            emp_string = f"{employee_id:3}" if employee_id is not None else "   "
+            print(f"{id_string}| {emp_string} | {description}")
     
 
 if __name__=="__main__":

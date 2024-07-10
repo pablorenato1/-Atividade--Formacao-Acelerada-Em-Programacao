@@ -5,11 +5,11 @@ class BancoDeDados:
         self.config = {
             'user': 'root',
             'password': 'root',
-            'host': 'localhost',  # ou outro endereço IP/hostname onde o MySQL está rodando
-            'database': 'banco_de_atividades',
+            'host': 'localhost', 
+            'database': 'sistema_de_gerenciamento',
             'raise_on_warnings': True
         }
-        self.cursor = None
+        self.conn = self.connectToDatabase()
 
     def connectToDatabase(self):
         try:
@@ -26,7 +26,7 @@ class BancoDeDados:
         pass
 
     def addObjetcToEmployee(self, name):
-        insert_query = f"INSERT INTO employee (nome) VALUES ('{name}')"
+        insert_query = f"INSERT INTO empregados (nome) VALUES ('{name}')"
         self.conn._execute_query(insert_query)
 
         try:
@@ -38,7 +38,7 @@ class BancoDeDados:
 
     def deleteObjectOnEmployee(self, employeeId):
         try:
-            deleteQuery = f"DELETE FROM employee WHERE employeeId ={employeeId}"
+            deleteQuery = f"DELETE FROM empregados WHERE id ={employeeId}"
             self.conn._execute_query(deleteQuery)
             return True
         except:
@@ -46,7 +46,7 @@ class BancoDeDados:
             return False 
 
     def addObjetcToTask(self, description):
-        insert_query = f"INSERT INTO task (description) VALUES ('{description}')"
+        insert_query = f"INSERT INTO tarefas (descricao) VALUES ('{description}')"
         self.conn._execute_query(insert_query)
 
         try:
@@ -57,7 +57,7 @@ class BancoDeDados:
             return False
 
     def deleteObjectOnTask(self, taskId):
-        deleteQuery = f"DELETE FROM task WHERE taskId ={taskId}"
+        deleteQuery = f"DELETE FROM tarefas WHERE id={taskId}"
         self.conn._execute_query(deleteQuery)
         try:
             self.conn.commit()
@@ -67,7 +67,7 @@ class BancoDeDados:
             return False 
         
     def searchTaskOwner(self, taskId) -> int:
-        searchQuery = f"SELECT memberId WHERE taskId={taskId}"
+        searchQuery = f"SELECT id_empregado WHERE id={taskId}"
         self.conn._execute_query(searchQuery)
         try:
             self.conn.commit()
@@ -79,7 +79,7 @@ class BancoDeDados:
             return False
         
     def getAllTask(self,):
-        self.cursor.execute("SELECT * FROM task")
+        self.cursor.execute("SELECT * FROM tarefas")
         records = self.cursor.fetchall()
 
         if not records:
@@ -89,7 +89,7 @@ class BancoDeDados:
             return records
 
     def getAllEmployees(self):
-        self.cursor.execute("SELECT * FROM employee")
+        self.cursor.execute("SELECT * FROM empregados")
         records = self.cursor.fetchall()
         for row in records:
             employeeId, supervisorId, nome = row
@@ -109,4 +109,3 @@ class BancoDeDados:
 if __name__=="__main__":
     init = BancoDeDados()
     print(init.connectToDatabase())
-    init.addObjetcToEmployee("Vitor")
