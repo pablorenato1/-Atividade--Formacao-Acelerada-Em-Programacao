@@ -15,7 +15,7 @@ class BancoDeDados:
         try:
             self.conn = mysql.connector.connect(**self.config)
             self.cursor = self.conn.cursor()
-            print("Conexão Estabelecida com Sucesso")
+            # print("Conexão Estabelecida com Sucesso")
             return self.conn
         except:
             print("Não foi possivel estabelecer conexão com o banco de dados")
@@ -28,6 +28,29 @@ class BancoDeDados:
     def addObjetcToEmployee(self, name):
         insert_query = f"INSERT INTO empregados (nome) VALUES ('{name}')"
         self.conn._execute_query(insert_query)
+
+        try:
+            self.conn.commit()  # Commit the transaction
+            return True
+        except Exception as err:
+            print(f"Inesperado {err=}, {type(err)=}")
+            return False
+
+    def updateTask(self, description="", id_employee="", id=""):
+        set_clauses = []
+        if description != "":
+            set_clauses.append(f"descricao = '{description}'")
+
+        if id_employee != "":
+            set_clauses.append(f"id_empregado = {id_employee}")
+
+        # Constrói a consulta UPDATE
+        update_query = f"""
+            UPDATE tarefas
+            SET {", ".join(set_clauses)}
+            WHERE Id = {id}
+        """
+        self.conn._execute_query(update_query)
 
         try:
             self.conn.commit()  # Commit the transaction
@@ -61,6 +84,7 @@ class BancoDeDados:
         self.conn._execute_query(deleteQuery)
         try:
             self.conn.commit()
+            print("Tarefa removida com sucesso!!")
             return True
         except:
             print("Error: Houve algum erro durante a execução da Query.")

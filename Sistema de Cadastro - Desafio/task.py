@@ -42,8 +42,9 @@ class Task:
             task_id,description, employee_id  = row
             
             id_string = f"{task_id:3}"
-            emp_string = f"{employee_id:3}" if employee_id is not None else "   "
-            print(f"{id_string}| {emp_string} | {description}")
+            emp_string = f"{employee_id:4}" if employee_id is not None else "    "
+            print(f"{id_string} | {emp_string} | {description}")
+        print("===========================")
     
 
 if __name__=="__main__":

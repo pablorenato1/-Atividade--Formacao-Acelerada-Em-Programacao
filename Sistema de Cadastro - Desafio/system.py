@@ -9,8 +9,8 @@ class SistemaPrincipal:
     def menuUser(self):
         print('\nOpções:')
         print('1 - Lista de Tarefas')
-        print('2 - Lista de Empregados')
-        print('3 - Adicionar um novo Empregado')
+        # print('2 - Lista de Empregados')
+        # print('3 - Adicionar um novo Empregado')
         print('4 - Criar Tarefa')
         print('5 - Excluir Tarefa')
         print('6 - Alterar Tarefa')
@@ -21,20 +21,25 @@ class SistemaPrincipal:
         match option:
             case '1': # Show All Task
                 self.showAllTask()
-            case '2': # Show All Employee
-                self.showAllEmployee()
-            case '3': # Add new Employee
-                self.addNewEmployee()
+            # case '2': # Show All Employee
+            #     # self.showAllEmployee()
+            #     pass
+            # case '3': # Add new Employee
+            #     pass
+            #     # self.addNewEmployee()
             case '4': # Add new Task
                 self.registerNewTask()
             case '5': # Delete Task
-                pass
+                self.deleteTask()
             case '6': # Alter Task
-                pass
+                self.alterTask()
             case '0': # Exit
                 return self.endSystem()
             case _:
-                print(f"Error: opção '{option}' é inválida ")
+                print("\n=============================================")
+                print(f"Opção Inválida: opção '{option}' é inválida.")
+                print("---------------------------------------------")
+
         
         return True
     
@@ -45,18 +50,30 @@ class SistemaPrincipal:
         self.banco.getAllEmployees()
 
     def registerNewTask(self):
-        memberId = input('Digite o ID do Employee para atribuir a Task: ')
-        dateOfCreation = input('Digite a data de criação (AAAA-MM-DD): ')
-        dateToEnd = input('Digite a data de término (AAAA-MM-DD): ')
+        # dateOfCreation = input('Digite a data de criação (AAAA-MM-DD): ')
+        # dateToEnd = input('Digite a data de término (AAAA-MM-DD): ')
         description = input('Digite a descrição da Task: ')
+        memberId = input('[Optional] Digite o ID do Employee para atribuir a Task: ')
         # criar_task(conn, memberId, dateOfCreation, dateToEnd, description)
         self.banco.addObjetcToTask(description)
     
     def alterTask(self):
+        self.showAllTask()
+        tempId = input("Qual Tarefa gostaria de Alterar?\n")
+        print("===========================")
+        print("Caso não queira alterar nada, basta não entrar nara nos Input")
+        print("===========================")
+        description = input('[Opcional] Digite a nova descrição da tarefa: ')
+        memberId = input('[Optional] Digite o ID do Employee para atribuir a tarefa: ')
+        self.banco.updateTask(description=description, id_employee=memberId, id=tempId)
         pass
     
     def deleteTask(self):
-        pass
+        print("===========================")
+        tempId = input("Insira o ID da tarefa para ser excluida ou não insira nada para cancelar: ")
+        if tempId != "":
+            self.banco.deleteObjectOnTask(tempId)
+        return
     
     def endSystem(self):
         return False
